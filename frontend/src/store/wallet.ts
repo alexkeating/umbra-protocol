@@ -314,6 +314,13 @@ export default function useWalletStore() {
     }
   }
 
+  async function disconnectWallet() {
+    if (isLoading.value || !onboard.value) return;
+    const [primaryWallet] = onboard.value.state.get().wallets;
+    await onboard.value.disconnectWallet({ label: primaryWallet.label });
+    resetState();
+  }
+
   /**
    * @notice Prompts user for a signature to generate Umbra-specific private keys
    */
@@ -480,6 +487,7 @@ export default function useWalletStore() {
     // Methods
     configureProvider,
     connectWallet,
+    disconnectWallet,
     getPrivateKeys,
     getTokenBalances,
     setIsAccountSetup,
@@ -513,6 +521,7 @@ export default function useWalletStore() {
     NATIVE_TOKEN: computed(() => NATIVE_TOKEN.value),
     tokens: computed(() => tokens.value),
     userDisplayName: computed(() => userDisplayName.value),
+    connectedWalletLabel: computed(() => lastWallet),
   };
 }
 
